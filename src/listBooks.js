@@ -20,7 +20,7 @@ class ListBooks extends Component {
         <div className="list-books-content">
           <div>
             {bookShelves.map(shelves => (
-              <BookShelf allBooks={allBooks} shelf={shelves} onShelfChange={onShelfChange}/>
+              <BookShelf allBooks={allBooks} shelf={shelves} onShelfChange={onShelfChange} key={shelves.id}/>
             ))}
           </div>
         </div>

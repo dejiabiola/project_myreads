@@ -8,7 +8,9 @@ class Book extends Component {
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
+        {book.imageLinks !== undefined && (
+          <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+        )}
           <SelectBookShelf currShelf={book.shelf} onShelfChange={onShelfChange} book={book}/>
         </div>
         <div className="book-title">{book.title}</div>
