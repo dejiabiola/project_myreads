@@ -12,7 +12,10 @@ class Book extends Component {
           <SelectBookShelf currShelf={book.shelf} onShelfChange={onShelfChange} book={book}/>
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.authors[0]}</div>
+        {book.authors !== undefined && (
+          <div className="book-authors">{book.authors[0]}</div>
+        )}
+        
       </div>
     )
   }

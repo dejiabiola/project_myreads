@@ -15,7 +15,8 @@ const bookShelves = [
 ]
 class BooksApp extends Component {
   state = {
-    books: []
+    books: [],
+    searchedBooks: []
   }
 
   componentDidMount() {
@@ -43,6 +44,20 @@ class BooksApp extends Component {
     }))  
   }
 
+  searchBooksAPI = (query) => {
+    BooksAPI.search(query)
+    .then(books => {
+      if (books.error === 'empty query') {
+        console.log("nothing dey here")
+      } else {
+        this.setState({
+          searchedBooks: books
+        })
+      }
+     
+    }) 
+  }
+
   render() {
     return (
       <div className="app">
@@ -51,7 +66,7 @@ class BooksApp extends Component {
         )}
         />
         <Route path="/search" render={() => (
-          <SearchBooks />
+          <SearchBooks onSearch={this.searchBooksAPI} searchedBooks={this.state.searchedBooks}/>
         )}
         />
       </div>
