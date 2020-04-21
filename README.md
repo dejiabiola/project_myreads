@@ -18,3 +18,8 @@ The Project has the following functionalities:
 - React
 - React Router
 - PropTypes
+
+### ScreenShot
+
+![MyReads Project](/src/screenshots/image_2.png?raw=true)
+![MyReads Project](/src/screenshots/image_1.png?raw=true)
