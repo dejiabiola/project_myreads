@@ -88,11 +88,14 @@ class BooksApp extends Component {
   } 
 
   render() {
+
+    if (this.state.apiError) {
+      return ( 
+          <div>There is a problem with the server. Please reload your webpage and try again</div> 
+      )
+    }
     return (
-      <div className="app">
-        {this.state.apiError === true && 
-        <div>There is a problem with the server. Please reload your webpage and try again</div> 
-        }   
+      <div className="app"> 
         <Route exact path="/" render={() => (
         <ListBooks allBooks={this.state.books} bookShelves={bookShelves} onShelfChange={this.shelfChange}/>
         )}
