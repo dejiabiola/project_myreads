@@ -13,24 +13,39 @@ const bookShelves = [
   {id:"wantToRead", title: "Want To Read"},
   {id:"read", title: "Read"}
 ]
+
 class BooksApp extends Component {
   state = {
     books: [],
-    searchedBooks: []
+    searchedBooks: [],
+    searchError: false,
+    apiError: false
   }
 
   componentDidMount() {
+    // Get all the users book from api ans set state
     BooksAPI.getAll()
       .then(books => {
         this.setState(() => ({
-          books: books
+          books: books,
+          apiError: false
         }))
+      })
+      .catch(error => {
+        this.setState({
+          apiError: true
+        })
       })
   }
 
   shelfChange = (newShelf, selectedBook) => {
+    // change book shelf object property depending on user interaction and also update the api
     BooksAPI.update(selectedBook, newShelf)
-      .catch(err => console.log(err));
+    .catch(err => {
+        this.setState({
+          apiError: true
+        })
+    });
 
     if (newShelf === "none") {
       this.setState((oldState) => ({
@@ -45,33 +60,58 @@ class BooksApp extends Component {
   }
 
   searchBooksAPI = (query) => {
+    // Search for books based on query and set state
     BooksAPI.search(query)
     .then(books => {
       if (books.error === 'empty query') {
-        console.log("nothing dey here")
+        this.setState({
+          searchError: true
+        })
       } else {
         this.setState({
-          searchedBooks: books
+          searchedBooks: books,
+          searchError: false
         })
       }
-     
+    })
+    .catch(error => {
+      this.setState({
+        apiError: true
+      })
     }) 
   }
+
+  closeSearchPage = () => {
+    this.setState({
+      searchedBooks: []
+    })
+  } 
 
   render() {
     return (
       <div className="app">
+        {this.state.apiError === true && 
+        <div>There is a problem with the server. Please reload your webpage and try again</div> 
+        }   
         <Route exact path="/" render={() => (
-          <ListBooks allBooks={this.state.books} bookShelves={bookShelves} onShelfChange={this.shelfChange}/>
+        <ListBooks allBooks={this.state.books} bookShelves={bookShelves} onShelfChange={this.shelfChange}/>
         )}
         />
         <Route path="/search" render={() => (
-          <SearchBooks onSearch={this.searchBooksAPI} searchedBooks={this.state.searchedBooks}/>
+          <SearchBooks 
+          onSearch={this.searchBooksAPI} 
+          searchedBooks={this.state.searchedBooks} 
+          onShelfChange={this.shelfChange}
+          onCloseSearch={this.closeSearchPage}
+          allBooks = {this.state.books}
+          searchError = {this.state.searchError}
+          />
         )}
         />
+        
       </div>
     )
   }
 }
 
-export default BooksApp
+export default BooksApp;

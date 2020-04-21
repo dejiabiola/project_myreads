@@ -1,27 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import SelectBookShelf from './selectBookShelf';
+import PropTypes from 'prop-types'
 
 
-class Book extends Component {
-  render() {
-    const { book, onShelfChange } = this.props
-    return (
-      <div className="book">
-        <div className="book-top">
-        {book.imageLinks !== undefined && (
-          <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-        )}
-          <SelectBookShelf currShelf={book.shelf} onShelfChange={onShelfChange} book={book}/>
-        </div>
-        <div className="book-title">{book.title}</div>
-        {book.authors !== undefined && (
-          <div className="book-authors">{book.authors[0]}</div>
-        )}
-        
+const Book = (props) => {
+  // Handles rendering of each book on both SearchedBooksDisplay and BookShelf components and passes props to SelectBookShelf
+  const { book, onShelfChange } = props
+  return (
+    <div className="book">
+      <div className="book-top">
+      {book.imageLinks !== undefined && (
+        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+      )}
+        <SelectBookShelf currShelf={book.shelf} onShelfChange={onShelfChange} book={book}/>
       </div>
-    )
-  }
+      <div className="book-title">{book.title}</div>
+      {book.authors !== undefined && (
+        <div>
+        {book.authors.map((author, index) => (
+          <div className="book-authors" key={index}>{author}</div>
+        ))}
+        </div> 
+      )}  
+    </div>
+  )
 }
 
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+  onShelfChange: PropTypes.func.isRequired
+}
 
 export default Book;
